@@ -1,0 +1,20 @@
+# Environment & Secrets
+.env
+.env.local
+*.env
+!.env.example
+# Frontend
+frontend/node_modules/
+frontend/dist/
+npm-debug.log*
+# Python
+**/__pycache__/
+*.py[cod]
+backend/venv/
+backend/.venv/
+*.db
+*.sqlite3
+# IDE & OS
+.DS_Store
+.vscode/
+.idea/
