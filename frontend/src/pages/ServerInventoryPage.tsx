@@ -120,7 +120,7 @@ export const ServerInventoryPage: React.FC = () => {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+      <div className="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto no-scrollbar whitespace-nowrap">
         {['ALL', 'AVAILABLE', 'ASSIGNED', 'MAINTENANCE'].map((tab) => (
           <button
             key={tab}
@@ -165,7 +165,7 @@ export const ServerInventoryPage: React.FC = () => {
                 </div>
 
                 {/* Hardware Specs Grid */}
-                <div className="grid grid-cols-2 gap-2.5 bg-slate-950/60 p-3 rounded-lg border border-slate-800/80 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 bg-slate-950/60 p-3 rounded-lg border border-slate-800/80 text-xs">
                   <div className="flex items-center gap-2 text-slate-300">
                     <Cpu className="w-3.5 h-3.5 text-blue-400" />
                     <span className="truncate">{server.cpu} ({server.ram_gb} GB RAM)</span>
@@ -185,7 +185,7 @@ export const ServerInventoryPage: React.FC = () => {
                 </div>
 
                 {/* Footer Cost & Action */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-800/60">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800/60">
                   <div>
                     <div className="text-[11px] text-slate-500">Upstream Monthly Cost:</div>
                     <div className="text-sm font-bold text-white">
@@ -228,7 +228,7 @@ export const ServerInventoryPage: React.FC = () => {
               className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Upstream Provider</label>
               <select
@@ -253,7 +253,7 @@ export const ServerInventoryPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">CPU Model & Cores</label>
               <input
@@ -276,7 +276,7 @@ export const ServerInventoryPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Storage Disks</label>
               <input
@@ -300,7 +300,7 @@ export const ServerInventoryPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Monthly Provider Cost</label>
               <input
@@ -365,7 +365,7 @@ export const ServerInventoryPage: React.FC = () => {
                 className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Selling Price (per cycle)</label>
                 <input

@@ -67,7 +67,7 @@ export const InvoicesPage: React.FC = () => {
       ) : (
         <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-left text-xs min-w-[650px]">
               <thead className="bg-slate-950 text-slate-400 uppercase font-semibold border-b border-slate-800">
                 <tr>
                   <th className="px-5 py-3.5">Invoice #</th>

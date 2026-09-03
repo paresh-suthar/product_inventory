@@ -69,7 +69,7 @@ export const CurrenciesPage: React.FC = () => {
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
-        <table className="w-full text-left text-xs">
+        <table className="w-full text-left text-xs min-w-[550px]">
           <thead className="bg-slate-950 text-slate-400 uppercase font-semibold border-b border-slate-800">
             <tr>
               <th className="px-5 py-3.5">Code</th>
@@ -123,7 +123,7 @@ export const CurrenciesPage: React.FC = () => {
       {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Supported Currency">
         <form onSubmit={handleCreate} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">3-Letter Code</label>
               <input

@@ -95,7 +95,7 @@ export const BanksPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-white tracking-tight">Corporate Banks & Payment Gateways</h1>
           <p className="text-sm text-slate-400">Manage multi-currency business accounts, Stripe/PayPal gateways, and treasury transfers.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setIsTransferModalOpen(true)}
             className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold px-4 py-2.5 rounded-lg border border-slate-700 transition"
@@ -164,7 +164,7 @@ export const BanksPage: React.FC = () => {
               className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Account Type</label>
               <select
@@ -188,7 +188,7 @@ export const BanksPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Currency</label>
               <select
@@ -215,7 +215,7 @@ export const BanksPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Account Number</label>
               <input
@@ -259,7 +259,7 @@ export const BanksPage: React.FC = () => {
       {/* Modal: Transfer */}
       <Modal isOpen={isTransferModalOpen} onClose={() => setIsTransferModalOpen(false)} title="Inter-Account Treasury Transfer">
         <form onSubmit={handleTransfer} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">From Account (Source)</label>
               <select
@@ -285,7 +285,7 @@ export const BanksPage: React.FC = () => {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Transfer Amount (in source currency)</label>
               <input

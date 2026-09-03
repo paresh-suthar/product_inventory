@@ -23,7 +23,7 @@ services:
     build: ./frontend
     container_name: proxy
     ports:
-      - "80:80"
+      - "0.0.0.0:80:80"
     networks:
       - product
     depends_on:

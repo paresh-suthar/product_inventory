@@ -101,7 +101,7 @@ export const ClientsPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {clients.map((c) => (
             <div key={c.id} className="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-slate-700 transition space-y-4">
-              <div className="flex items-start justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                 <div>
                   <h3 className="font-bold text-white text-base">{c.company_name}</h3>
                   <div className="text-xs text-slate-400">Attn: {c.contact_name}</div>
@@ -112,14 +112,14 @@ export const ClientsPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-400 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
                 <div className="flex items-center gap-1.5 truncate"><Mail className="w-3.5 h-3.5 text-slate-500" /> {c.email}</div>
                 <div className="flex items-center gap-1.5 truncate"><Phone className="w-3.5 h-3.5 text-slate-500" /> {c.phone || 'N/A'}</div>
                 {c.tax_id && <div>Tax ID: <span className="text-slate-200">{c.tax_id}</span></div>}
                 <div>Preferred Currency: <b className="text-white">{c.preferred_currency}</b></div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2 border-t border-slate-800">
                 <div className="text-xs text-slate-400">
                   Wallet Transactions: <b>{c.wallet?.transactions.length || 0}</b>
                 </div>
@@ -153,7 +153,7 @@ export const ClientsPage: React.FC = () => {
               className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Primary Contact Name</label>
               <input
@@ -177,7 +177,7 @@ export const ClientsPage: React.FC = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Phone Number</label>
               <input
@@ -213,7 +213,7 @@ export const ClientsPage: React.FC = () => {
               className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 outline-none"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Tax ID / VAT</label>
               <input
