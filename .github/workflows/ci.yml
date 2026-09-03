@@ -25,4 +25,12 @@ jobs:
 
       - name: format check
         run: ruff format --check .
-        
+
+      - name: install tools
+        run: pip install pip-audit bandit
+
+      - name: check dependency vulnerabilities
+        run: pip-audit -r requirements.txt
+
+      - name: Scan code for security issues
+        run: bandit -r product_inventory
