@@ -18,3 +18,5 @@ backend/.venv/
 .DS_Store
 .vscode/
 .idea/
+#private_key
+pract
