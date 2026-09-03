@@ -1,62 +1,71 @@
-from typing import Optional, List
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel
+
 
 class IPAddressBase(BaseModel):
     ip_address: str
-    subnet_mask: str = '255.255.255.0'
-    gateway: Optional[str] = None
+    subnet_mask: str = "255.255.255.0"
+    gateway: str | None = None
     is_primary: bool = False
-    status: str = 'AVAILABLE'
+    status: str = "AVAILABLE"
+
 
 class IPAddressCreate(IPAddressBase):
-    server_id: Optional[str] = None
+    server_id: str | None = None
+
 
 class IPAddressResponse(IPAddressBase):
     id: str
-    server_id: Optional[str] = None
+    server_id: str | None = None
     created_at: datetime
+
     class Config:
         from_attributes = True
+
 
 class ServerBase(BaseModel):
     hostname: str
     provider_id: str
     datacenter_location: str
-    rack_node_id: Optional[str] = None
+    rack_node_id: str | None = None
     cpu: str
     ram_gb: int
     storage: str
-    bandwidth: str = '1 Gbps Unmetered'
+    bandwidth: str = "1 Gbps Unmetered"
     primary_ip: str
     upstream_cost: float
-    upstream_currency: str = 'EUR'
+    upstream_currency: str = "EUR"
     provider_renewal_day: int = 1
-    status: str = 'AVAILABLE' # AVAILABLE, ASSIGNED, MAINTENANCE, TERMINATED
-    notes: Optional[str] = None
+    status: str = "AVAILABLE"  # AVAILABLE, ASSIGNED, MAINTENANCE, TERMINATED
+    notes: str | None = None
+
 
 class ServerCreate(ServerBase):
-    additional_ips: Optional[List[str]] = []
+    additional_ips: list[str] | None = []
+
 
 class ServerUpdate(BaseModel):
-    hostname: Optional[str] = None
-    provider_id: Optional[str] = None
-    datacenter_location: Optional[str] = None
-    rack_node_id: Optional[str] = None
-    cpu: Optional[str] = None
-    ram_gb: Optional[int] = None
-    storage: Optional[str] = None
-    bandwidth: Optional[str] = None
-    primary_ip: Optional[str] = None
-    upstream_cost: Optional[float] = None
-    upstream_currency: Optional[str] = None
-    provider_renewal_day: Optional[int] = None
-    status: Optional[str] = None
-    notes: Optional[str] = None
+    hostname: str | None = None
+    provider_id: str | None = None
+    datacenter_location: str | None = None
+    rack_node_id: str | None = None
+    cpu: str | None = None
+    ram_gb: int | None = None
+    storage: str | None = None
+    bandwidth: str | None = None
+    primary_ip: str | None = None
+    upstream_cost: float | None = None
+    upstream_currency: str | None = None
+    provider_renewal_day: int | None = None
+    status: str | None = None
+    notes: str | None = None
+
 
 class ServerResponse(ServerBase):
     id: str
     created_at: datetime
-    ip_addresses: List[IPAddressResponse] = []
+    ip_addresses: list[IPAddressResponse] = []
+
     class Config:
         from_attributes = True

@@ -1,5 +1,5 @@
-from typing import List, Dict, Any
 from pydantic import BaseModel
+
 
 class BankBalanceSummary(BaseModel):
     id: str
@@ -9,14 +9,16 @@ class BankBalanceSummary(BaseModel):
     balance: float
     balance_in_base: float
 
+
 class RenewalAlert(BaseModel):
     id: str
-    type: str # SERVER_UPSTREAM, CLIENT_INVOICE, CLIENT_SUBSCRIPTION
+    type: str  # SERVER_UPSTREAM, CLIENT_INVOICE, CLIENT_SUBSCRIPTION
     name: str
     due_date: str
     amount: float
     currency: str
     days_left: int
+
 
 class AnalyticsSummary(BaseModel):
     base_currency: str
@@ -29,5 +31,5 @@ class AnalyticsSummary(BaseModel):
     assigned_servers: int
     total_clients: int
     total_bank_balance_base: float
-    bank_balances: List[BankBalanceSummary]
-    upcoming_renewals: List[RenewalAlert]
+    bank_balances: list[BankBalanceSummary]
+    upcoming_renewals: list[RenewalAlert]

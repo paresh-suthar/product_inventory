@@ -1,13 +1,18 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, DateTime
+
+from sqlalchemy import Column, DateTime, String
+
 from app.core.database import Base
+
 
 def generate_uuid() -> str:
     return str(uuid.uuid4())
 
+
 def utcnow_naive() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
+
 
 class TimeStampedBase(Base):
     __abstract__ = True
