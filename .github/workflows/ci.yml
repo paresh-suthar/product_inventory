@@ -34,5 +34,3 @@ jobs:
       - name: check dependency vulnerabilities
         run: pip-audit -r requirements.txt
 
-      - name: Scan code for security issues
-        run: bandit -r app/

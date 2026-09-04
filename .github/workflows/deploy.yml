@@ -1,0 +1,37 @@
+name: deploy
+
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: ssh into ec2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Navigating to project directory..."
+            cd ~/product_inventory
+
+            echo "Pulling latest changes from main branch..."
+            git pull origin main
+
+            echo "Rebuilding and restarting Docker containers..."
+            docker compose down
+            docker compose up -d --build
+
+            echo echo "Cleaning up unused Docker build cache..."
+            docker image prune -f
+
+            echo "Deployment completed successfully!"
+
