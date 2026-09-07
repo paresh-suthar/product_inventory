@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -54,3 +55,12 @@ class InvoiceResponse(InvoiceBase):
 
     class Config:
         from_attributes = True
+
+
+class InvoiceCreateManual(BaseModel):
+    client_id: str
+    description: str
+    total_amount: float
+    currency: str
+    due_days: Optional[int] = 7
+    bank_account_id: Optional[str] = None

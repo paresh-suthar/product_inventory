@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Response
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -13,6 +13,7 @@ from app.models.invoice import Invoice, Payment
 from app.models.server import Server
 from app.models.subscription import Subscription
 from app.schemas.invoice import (
+    InvoiceCreateManual,
     InvoiceResponse,
     PaymentCreate,
 )
@@ -62,7 +63,7 @@ async def download_invoice_pdf(id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/{id}/pay", response_model=InvoiceResponse)
-async def record_payment(id: str, req: PaymentCreate, db: AsyncSession = Depends(get_db)):
+async def record_payment(id: str, req: PaymentCreate, InvoiceCreateManual, db: AsyncSession = Depends(get_db)):
     inv_res = await db.execute(select(Invoice).options(selectinload(Invoice.payments)).where(Invoice.id == id))
     invoice = inv_res.scalar_one_or_none()
     if not invoice:
@@ -98,3 +99,49 @@ async def auto_debit_invoice(id: str, db: AsyncSession = Depends(get_db)):
     if not success:
         raise HTTPException(status_code=400, detail="Auto-debit failed or insufficient client wallet balance")
     return {"status": "success", "message": "Invoice successfully settled from wallet"}
+
+
+@router.post("/manual", response_model=InvoiceResponse)
+async def create_manual_invoice(req: InvoiceCreateManual, db: AsyncSession = Depends(get_db)):
+    from datetime import datetime, timedelta, timezone
+
+    inv_count = await db.execute(select(func.count(Invoice.id)))
+    count = inv_count.scalar() or 0
+    inv_no = f"INV-{datetime.now().year}-{count + 1001:04d}"
+
+    tax_rate = 0.0
+    tax_amount = round(float(req.total_amount) * tax_rate, 2)
+    subtotal = float(req.total_amount)
+    total = subtotal + tax_amount
+
+    invoice = Invoice(
+        id=str(uuid.uuid4()),
+        invoice_no=inv_no,
+        client_id=req.client_id,
+        subscription_id=None,
+        bank_account_id=req.bank_account_id,
+        issue_date=datetime.now(timezone.utc),
+        due_date=datetime.now(timezone.utc) + timedelta(days=req.due_days or 7),
+        subtotal=subtotal,
+        tax_amount=tax_amount,
+        total_amount=total,
+        currency=req.currency,
+        status="UNPAID",
+        notes=req.description or "Custom Infrastructure Service Invoice",
+    )
+    db.add(invoice)
+    await db.commit()
+    await db.refresh(invoice)
+    return invoice
+
+
+@router.delete("/{id}")
+async def delete_invoice(id: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Invoice).where(Invoice.id == id))
+    invoice = result.scalar_one_or_none()
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+
+    await db.delete(invoice)
+    await db.commit()
+    return {"message": "Invoice deleted successfully", "id": id}

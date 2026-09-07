@@ -83,3 +83,42 @@ async def transfer_between_accounts(req: AccountTransferCreate, db: AsyncSession
     await db.commit()
     await db.refresh(transfer)
     return transfer
+
+
+@router.get("/transfers/history")
+async def list_transfers(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(AccountTransfer).order_by(AccountTransfer.created_at.desc()))
+    transfers = result.scalars().all()
+    banks_res = await db.execute(select(BankAccount))
+    bank_map = {b.id: b for b in banks_res.scalars().all()}
+    out = []
+    for t in transfers:
+        out.append(
+            {
+                "id": t.id,
+                "from_account_id": t.from_account_id,
+                "to_account_id": t.to_account_id,
+                "amount_sent": float(t.amount_sent),
+                "amount_received": float(t.amount_received),
+                "currency_sent": t.currency_sent,
+                "currency_received": t.currency_received,
+                "fx_fee": float(t.fx_fee or 0),
+                "notes": t.notes,
+                "created_at": t.created_at.isoformat() if t.created_at else "",
+                "from_account": bank_map.get(t.from_account_id),
+                "to_account": bank_map.get(t.to_account_id),
+            }
+        )
+    return out
+
+
+@router.delete("/{id}")
+async def delete_bank_account(id: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(BankAccount).where(BankAccount.id == id))
+    bank = result.scalar_one_or_none()
+    if not bank:
+        raise HTTPException(status_code=404, detail="Bank account not found")
+
+    await db.delete(bank)
+    await db.commit()
+    return {"message": "Bank account deleted successfully", "id": id}

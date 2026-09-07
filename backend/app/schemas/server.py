@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -69,3 +70,10 @@ class ServerResponse(ServerBase):
 
     class Config:
         from_attributes = True
+
+
+class ServerIPCreate(BaseModel):
+    ip_address: str
+    subnet_mask: Optional[str] = "255.255.255.255"
+    reverse_dns: Optional[str] = None
+    is_primary: Optional[bool] = False
