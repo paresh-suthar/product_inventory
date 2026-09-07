@@ -8,9 +8,11 @@ from sqlalchemy.orm import selectinload
 from app.core.database import get_db
 from app.models.client import Client, ClientWallet, WalletTransaction
 from app.models.financial import BankAccount
+from app.models.subscription import Subscription
 from app.schemas.client import (
     ClientCreate,
     ClientResponse,
+    ClientUpdate,
     ClientWalletResponse,
     WalletDepositRequest,
 )
@@ -104,3 +106,72 @@ async def deposit_to_wallet(id: str, req: WalletDepositRequest, db: AsyncSession
     await db.commit()
     await db.refresh(wallet)
     return wallet
+
+
+@router.get("/{id}")
+async def get_client_details(id: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Client)
+        .options(selectinload(Client.wallet).selectinload(ClientWallet.transactions))
+        .where(Client.id == id)
+    )
+    client = result.scalar_one_or_none()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+
+    # Also fetch client's subscriptions and servers
+    subs_res = await db.execute(
+        select(Subscription).options(selectinload(Subscription.server)).where(Subscription.client_id == id)
+    )
+    subs = subs_res.scalars().all()
+
+    return {"client": client, "subscriptions": subs}
+
+
+@router.put("/{id}", response_model=ClientResponse)
+async def update_client(id: str, req: ClientUpdate, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Client)
+        .options(selectinload(Client.wallet).selectinload(ClientWallet.transactions))
+        .where(Client.id == id)
+    )
+    client = result.scalar_one_or_none()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+
+    for key, value in req.dict(exclude_unset=True).items():
+        setattr(client, key, value)
+
+    await db.commit()
+    await db.refresh(client)
+    return client
+
+
+@router.delete("/{id}")
+async def delete_client(id: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Client)
+        .options(selectinload(Client.wallet).selectinload(ClientWallet.transactions))
+        .where(Client.id == id)
+    )
+    client = result.scalar_one_or_none()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+
+    # Check for active subscriptions
+    sub_res = await db.execute(
+        select(Subscription).where(Subscription.client_id == id, Subscription.status == "ACTIVE")
+    )
+    if sub_res.scalars().first():
+        raise HTTPException(
+            status_code=400, detail="Cannot delete client with active server subscriptions. Cancel subscriptions first."
+        )
+
+    if client.wallet:
+        for tx in client.wallet.transactions:
+            await db.delete(tx)
+        await db.delete(client.wallet)
+
+    await db.delete(client)
+    await db.commit()
+    return {"message": "Client deleted successfully", "id": id}

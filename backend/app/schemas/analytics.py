@@ -12,12 +12,24 @@ class BankBalanceSummary(BaseModel):
 
 class RenewalAlert(BaseModel):
     id: str
-    type: str  # SERVER_UPSTREAM, CLIENT_INVOICE, CLIENT_SUBSCRIPTION
+    type: str
     name: str
     due_date: str
     amount: float
     currency: str
     days_left: int
+
+
+class MonthlyTrend(BaseModel):
+    month: str
+    revenue: float
+    spend: float
+    profit: float
+
+
+class DatacenterStat(BaseModel):
+    location: str
+    count: int
 
 
 class AnalyticsSummary(BaseModel):
@@ -33,3 +45,5 @@ class AnalyticsSummary(BaseModel):
     total_bank_balance_base: float
     bank_balances: list[BankBalanceSummary]
     upcoming_renewals: list[RenewalAlert]
+    monthly_trends: list[MonthlyTrend] = []
+    datacenter_distribution: list[DatacenterStat] = []

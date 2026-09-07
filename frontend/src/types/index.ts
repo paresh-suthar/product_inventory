@@ -158,6 +158,8 @@ export interface AnalyticsSummary {
     balance: number;
     balance_in_base: number;
   }[];
+  monthly_trends?: MonthlyTrend[];
+  datacenter_distribution?: DatacenterStat[];
   upcoming_renewals: {
     id: string;
     type: string;
@@ -167,4 +169,30 @@ export interface AnalyticsSummary {
     currency: string;
     days_left: number;
   }[];
+}
+
+
+export interface MonthlyTrend {
+  month: string;
+  revenue: number;
+  spend: number;
+  profit: number;
+}
+
+export interface DatacenterStat {
+  location: string;
+  count: number;
+}
+
+export interface AccountTransfer {
+  id: string;
+  from_account_id: string;
+  to_account_id: string;
+  amount_sent: number;
+  amount_received: number;
+  fx_fee: number;
+  notes?: string;
+  created_at: string;
+  from_account?: BankAccount;
+  to_account?: BankAccount;
 }
