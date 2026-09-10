@@ -78,7 +78,7 @@ async def create_server(req: ServerCreate, db: AsyncSession = Depends(get_db)):
 
 
 @router.put("/{id}", response_model=ServerResponse)
-async def update_server(id: str, req: ServerUpdate, ServerIPCreate, db: AsyncSession = Depends(get_db)):
+async def update_server(id: str, req: ServerUpdate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Server).options(selectinload(Server.ip_addresses)).where(Server.id == id))
     server = result.scalar_one_or_none()
     if not server:

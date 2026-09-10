@@ -2,6 +2,8 @@ import asyncio
 import uuid
 from datetime import datetime, timedelta, timezone
 
+from sqlalchemy import select
+
 from app.core.database import AsyncSessionLocal, Base, engine
 from app.core.security import get_password_hash
 from app.models.client import Client, ClientWallet, WalletTransaction
@@ -31,8 +33,6 @@ async def seed_data():
 
     async with AsyncSessionLocal() as session:
         # Check if already seeded
-        from sqlalchemy import select
-
         existing_user = await session.execute(select(User).where(User.email == "admin@stockflow.internal"))
         if existing_user.scalar_one_or_none():
             print("Database already seeded.")

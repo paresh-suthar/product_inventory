@@ -25,7 +25,7 @@ async def generate_subscription_invoice(session: AsyncSession, subscription_id: 
     )
     bank = bank_res.scalars().first()
 
-    now = datetime.now(timezone.utc).replace(tzinfo=None).replace(tzinfo=None)
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     inv_count_res = await session.execute(select(Invoice))
     inv_num = len(inv_count_res.scalars().all()) + 1001
 

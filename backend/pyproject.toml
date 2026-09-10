@@ -3,7 +3,7 @@ line-length = 120
 target-version = "py311"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I"]
+select = ["E", "F", "W", "I", "B", "C4", "PIE", "PLC", "PLE", "PLW", "RUF", "SIM"]
 ignore = [
     "B008", # FastAPI Depends in argument defaults
     "E501", # Line length handled by formatter
@@ -12,3 +12,23 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
+
+[tool.pylint.main]
+init-hook = "import sys; sys.path.append('.')"
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "too-few-public-methods",
+    "singleton-comparison",
+    "import-error",
+    "redefined-builtin",
+    "line-too-long",
+    "too-many-locals",
+    "duplicate-code",
+]
+
+[tool.pylint.format]
+max-line-length = 120

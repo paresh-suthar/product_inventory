@@ -15,6 +15,8 @@ from app.services.fx_service import convert_currency
 
 router = APIRouter()
 
+UPCOMING_RENEWAL_DAYS = 14
+
 
 @router.get("/summary", response_model=AnalyticsSummary)
 async def get_analytics_summary(db: AsyncSession = Depends(get_db)):
@@ -71,7 +73,7 @@ async def get_analytics_summary(db: AsyncSession = Depends(get_db)):
     for sub in subs:
         if sub.next_due_date:
             days = (sub.next_due_date - now).days
-            if days <= 14:
+            if days <= UPCOMING_RENEWAL_DAYS:
                 renewals.append(
                     RenewalAlert(
                         id=sub.id,
@@ -110,7 +112,7 @@ async def get_analytics_summary(db: AsyncSession = Depends(get_db)):
         total_servers=total_servers,
         available_servers=avail_servers,
         assigned_servers=assigned_servers,
-        total_clients=len(clients_res.scalars().all()) if "clients_res" in locals() else 0,
+        total_clients=total_clients,
         total_bank_balance_base=total_bank_base,
         bank_balances=bank_summaries,
         upcoming_renewals=renewals,

@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy import func, select
@@ -63,7 +63,7 @@ async def download_invoice_pdf(id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/{id}/pay", response_model=InvoiceResponse)
-async def record_payment(id: str, req: PaymentCreate, InvoiceCreateManual, db: AsyncSession = Depends(get_db)):
+async def record_payment(id: str, req: PaymentCreate, db: AsyncSession = Depends(get_db)):
     inv_res = await db.execute(select(Invoice).options(selectinload(Invoice.payments)).where(Invoice.id == id))
     invoice = inv_res.scalar_one_or_none()
     if not invoice:
@@ -103,8 +103,6 @@ async def auto_debit_invoice(id: str, db: AsyncSession = Depends(get_db)):
 
 @router.post("/manual", response_model=InvoiceResponse)
 async def create_manual_invoice(req: InvoiceCreateManual, db: AsyncSession = Depends(get_db)):
-    from datetime import datetime, timedelta, timezone
-
     inv_count = await db.execute(select(func.count(Invoice.id)))
     count = inv_count.scalar() or 0
     inv_no = f"INV-{datetime.now().year}-{count + 1001:04d}"
