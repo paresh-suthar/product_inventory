@@ -35,4 +35,17 @@ jobs:
 
       - name: check dependency vulnerabilities
         run: pip-audit -r requirements.txt
+  node:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+      steps:
+        - uses: actions/checkout@v4
 
+        - name: setup node
+          uses: actions/setup-node@v4
+          with:
+            node-version: "20"
+        - name: lint
+          run: npm run lint
