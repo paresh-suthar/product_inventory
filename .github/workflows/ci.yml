@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: ["**"]
 
 jobs:
   ruff:
@@ -39,12 +40,16 @@ jobs:
     defaults:
       run:
         working-directory: frontend
-      steps:
-        - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: setup node
-          uses: actions/setup-node@v4
-          with:
-            node-version: "20"
-        - name: lint
-          run: npm run lint
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: install dep
+        run: npm install
+
+      - name: lint
+        run: npm run lint
