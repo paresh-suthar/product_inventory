@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.api_router import api_router
 from app.core.config import settings
 from app.core.database import Base, engine
+from app.core.redis import init_redis, close_redis
 from app.seed import seed_data
 
 app = FastAPI(
@@ -30,6 +31,13 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.on_event("startup")
 async def startup_event():
+    # Initialize Redis connection pool
+    try:
+        await init_redis()
+        print("Connected to Redis successfully.")
+    except Exception as e:
+        print(f"Could not connect to Redis: {e}")
+
     # Wait for DB to be ready with retry loop
     connected = False
     for i in range(15):
@@ -52,6 +60,12 @@ async def startup_event():
         print(f"Startup seed notice: {e}")
 
     print("StockFlow Server & Financial ERP Database Ready.")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await close_redis()
+    print("Redis connection closed.")
 
 
 @app.get("/")
