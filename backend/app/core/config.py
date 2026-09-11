@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     # Database: Supports Postgres asyncpg with SQLite fallback
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./stockflow.db")
 
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+
     BASE_CURRENCY: str = "USD"
 
     class Config:
