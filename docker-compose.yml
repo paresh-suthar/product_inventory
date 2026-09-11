@@ -4,6 +4,7 @@ services:
     container_name: backend
     depends_on:
       - db
+      - redis
     networks:
       - product
     env_file:
@@ -29,8 +30,20 @@ services:
     depends_on:
       - backend
 
+  redis:
+    image: redis:5.0.3-alpine
+    container_name: redis_cache
+    volumes:
+      - redis_data:/data
+    env_file:
+      - ./backend/.env
+    networks:
+      - product
+
+
 volumes:
   db-data:
+  redis_data:
 
 networks:
   product:
