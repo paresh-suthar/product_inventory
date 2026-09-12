@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.api_router import api_router
 from app.core.config import settings
 from app.core.database import Base, engine
-from app.core.redis import init_redis, close_redis
+from app.core.redis import close_redis, init_redis
 from app.seed import seed_data
 
 app = FastAPI(
