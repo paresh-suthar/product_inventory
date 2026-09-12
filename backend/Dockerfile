@@ -1,8 +1,10 @@
-FROM python:3.11-slim AS builder
+FROM python:3.11-alpine AS builder
 
 WORKDIR /app
 
 COPY requirements.txt .
+
+RUN pip install --upgrade pip wheel setuptools
 
 RUN pip install --no-cache-dir -r requirements.txt
 
