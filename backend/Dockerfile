@@ -2,6 +2,9 @@ FROM python:3.11-alpine AS builder
 
 WORKDIR /app
 
+# Upgrade Alpine packages to fix OS-level vulnerabilities
+RUN apk upgrade --no-cache
+
 COPY requirements.txt .
 
 RUN pip install --upgrade pip wheel setuptools
