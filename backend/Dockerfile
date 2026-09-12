@@ -3,7 +3,7 @@ FROM python:3.11-alpine AS builder
 WORKDIR /app
 
 # Upgrade Alpine packages to fix OS-level vulnerabilities
-RUN apk upgrade --no-cache
+RUN apk upgrade --no-cache && apk add --no-cache --upgrade libuuid
 
 COPY requirements.txt .
 

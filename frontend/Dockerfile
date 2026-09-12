@@ -13,7 +13,7 @@ RUN npm run build
 FROM nginx:alpine 
 
 # Upgrade Alpine packages to fix OS-level vulnerabilities
-RUN apk upgrade --no-cache
+RUN apk upgrade --no-cache && apk add --no-cache --upgrade libuuid
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
