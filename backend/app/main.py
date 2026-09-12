@@ -34,9 +34,9 @@ async def startup_event():
     # Initialize Redis connection pool
     try:
         await init_redis()
-        print("Connected to Redis successfully.")
+        print("Connected to Redis successfully.", flush=True)
     except Exception as e:
-        print(f"Could not connect to Redis: {e}")
+        print(f"Could not connect to Redis: {e}", flush=True)
 
     # Wait for DB to be ready with retry loop
     connected = False
@@ -47,7 +47,7 @@ async def startup_event():
             connected = True
             break
         except Exception:
-            print(f"Waiting for database to accept connections... ({i + 1}/15)")
+            print(f"Waiting for database to accept connections... ({i + 1}/15)", flush=True)
             await asyncio.sleep(2)
 
     if not connected:
@@ -57,9 +57,9 @@ async def startup_event():
     try:
         await seed_data()
     except Exception as e:
-        print(f"Startup seed notice: {e}")
+        print(f"Startup seed notice: {e}", flush=True)
 
-    print("StockFlow Server & Financial ERP Database Ready.")
+    print("StockFlow Server & Financial ERP Database Ready.", flush=True)
 
 
 @app.on_event("shutdown")
